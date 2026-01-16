@@ -3,6 +3,8 @@ const containerPlay = document.getElementById("containerPlayConformation");
 
 playButton.addEventListener("click", () => {
     containerPlay.classList.add("active");
+    bgMusic.volume = 0.9; // opcional
+  bgMusic.play();
 });
 
 containerPlay.addEventListener("click", (e) => {
@@ -16,3 +18,4 @@ document.addEventListener("keydown", (e) => {
         containerPlay.classList.remove("active");
     }
 });
+
