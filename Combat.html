@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Ares RPG</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div id="battle-screen" class="container-fluid vh-100 text-white">
+  
+  <!-- Fondo -->
+  <div id="background"></div>
+
+  <!-- Campo de batalla -->
+  <div class="row h-75 align-items-end">
+    <div class="col-6 text-center">
+      <img id="player1" class="character">
+      <img id="player2" class="character">
+    </div>
+    <div class="col-6 text-center">
+      <img id="enemy1" class="character">
+    </div>
+  </div>
+
+  <!-- Menú -->
+  <div class="row h-25">
+    <div class="col">
+      <div class="card bg-dark">
+        <div class="card-body">
+          <div class="row g-2">
+            <div class="col-6"><button class="btn btn-danger w-100" onclick="attack()">Atacar</button></div>
+            <div class="col-6"><button class="btn btn-warning w-100" onclick="skill()">Habilidad</button></div>
+            <div class="col-6"><button class="btn btn-secondary w-100" onclick="defend()">Defender</button></div>
+            <div class="col-6"><button class="btn btn-light w-100" onclick="passTurn()">Pasar</button></div>
+          </div>
+          <p id="battle-log" class="mt-2"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="./js/characters.js"></script>
+<script src="./js/background.js"></script>
+<script src="./js/ui.js"></script>
+<script src="./js/battle.js"></script>
+<script src="./js/game.js"></script>
+<script src="./game.js"></script>
+</body>
+</html>
