@@ -2,7 +2,7 @@ body {
   margin: 0;
   overflow: hidden;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  color: white;
+  background-color: #111;
 }
 
 /* Fondo */
@@ -19,39 +19,27 @@ body {
 /* Personajes */
 .character {
   position: absolute;
-  bottom: 0;
+  bottom: 200px; /* separados de los botones de acción */
   width: 120px;
-  margin: 10px;
   transition: transform 0.3s ease;
+  z-index: 3; /* personajes sobre el menú */
 }
 
-/* Jugador */
-.player {
-  left: 55%; /* Ajustado para que estén más cerca */
+.player1 {
+  left: 25%;
 }
 
-/* Enemigo */
-.enemy {
-  right: 55%; /* Ajustado para que estén más cerca */
+.player2 {
+  right: 25%;
   transform: scaleX(-1);
 }
 
 /* Animaciones */
-.player.attack {
-  transform: translateX(100px);
-}
+.player1.attack { transform: translateX(100px); }
+.player2.attack { transform: translateX(-100px) scaleX(-1); }
 
-.enemy.attack {
-  transform: translateX(-100px) scaleX(-1);
-}
-
-.enemy.hit {
-  animation: hit 0.3s;
-}
-
-.player.hit {
-  animation: hitPlayer 0.3s;
-}
+.player1.hit { animation: hitPlayer 0.3s; }
+.player2.hit { animation: hit 0.3s; }
 
 @keyframes hit {
   0% { transform: translateX(0) scaleX(-1); }
@@ -65,21 +53,6 @@ body {
   100% { transform: translateX(0); }
 }
 
-/* Botones */
-button {
-  transition: transform 0.1s ease, box-shadow 0.1s ease;
-  cursor: pointer;
-}
-
-button:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 15px rgba(255,255,255,0.3);
-}
-
-button:active {
-  transform: scale(0.95);
-}
-
 /* HUD */
 #hud {
   position: absolute;
@@ -88,7 +61,8 @@ button:active {
   display: flex;
   justify-content: space-between;
   padding: 0 60px;
-  pointer-events: none; /* los botones de vida no interfieren */
+  pointer-events: none;
+  z-index: 4; /* sobre personajes */
 }
 
 /* Caja de vida */
@@ -98,17 +72,10 @@ button:active {
   padding: 10px;
   border-radius: 8px;
   color: white;
-  font-family: sans-serif;
-  pointer-events: auto; /* para que las barras de vida no bloqueen botones */
+  pointer-events: auto;
 }
 
-/* Nombre */
-.life-box .name {
-  font-size: 14px;
-  margin-bottom: 5px;
-}
-
-/* Barra */
+/* Barra de vida */
 .life-bar {
   width: 100%;
   height: 14px;
@@ -117,7 +84,6 @@ button:active {
   overflow: hidden;
 }
 
-/* Relleno */
 .life-fill {
   height: 100%;
   width: 100%;
@@ -125,15 +91,8 @@ button:active {
   transition: width 0.4s ease;
 }
 
-/* Posiciones */
-.player-life {
-  align-self: flex-start;
-}
-
-.enemy-life {
-  align-self: flex-end;
-  text-align: right;
-}
+.player1-life { align-self: flex-start; }
+.player2-life { align-self: flex-end; text-align: right; }
 
 /* RESULT SCREEN */
 .result-screen {
@@ -143,13 +102,10 @@ button:active {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 9999; /* Muy arriba para que los botones sean clicables */
-  pointer-events: auto;
+  z-index: 9999;
 }
 
-.d-none {
-  display: none !important;
-}
+.d-none { display: none !important; }
 
 .result-box {
   background: #111;
@@ -160,27 +116,32 @@ button:active {
   box-shadow: 0 10px 30px rgba(0,0,0,0.7);
 }
 
-.result-box h1 {
-  font-size: 48px;
-  margin-bottom: 30px;
-}
-
-.result-box button {
-  cursor: pointer;
-}
-
-/* MENU DE ACCIONES */
-#action-menu {
+/* MENÚ DE ACCIONES */
+.action-menu {
   background: rgba(0,0,0,0.8);
-  padding: 15px 30px;
+  padding: 15px 20px;
   border-radius: 15px;
   box-shadow: 0 6px 20px rgba(0,0,0,0.6);
-  user-select: none;
   display: flex;
-  justify-content: center;
   gap: 15px;
+  user-select: none;
+  z-index: 2; /* detrás de personajes */
 }
 
+#action-menu-player1 {
+  position: fixed;
+  bottom: 20px;
+  left: 30%;
+  transform: translateX(-50%);
+}
+
+#action-menu-player2 {
+  position: fixed;
+  bottom: 20px;
+  right: 20%;
+}
+
+/* Botones */
 .action-btn {
   background: #222;
   color: white;
@@ -195,35 +156,16 @@ button:active {
   justify-content: center;
   gap: 10px;
   font-weight: 600;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
 .action-btn:hover,
-.action-btn:focus {
-  transform: scale(1.1);
-  box-shadow: 0 8px 25px rgba(255,255,255,0.3);
-  outline: none;
-}
+.action-btn:focus { transform: scale(1.1); box-shadow: 0 8px 25px rgba(255,255,255,0.3); outline: none; }
+.action-btn:active { transform: scale(0.95); box-shadow: 0 4px 12px rgba(0,0,0,0.8); }
 
-.action-btn:active {
-  transform: scale(0.95);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.8);
-}
-
-.action-icon {
-  width: 50px;
-  height: 50px;
-  object-fit: contain;
-}
-
-/* Colores específicos */
 .btn-attack { background: #d32f2f; }
 .btn-attack2 { background: #fbc02d; color: #222; }
 .btn-defend { background: #1976d2; }
 .btn-special { background: #616161; }
 
 .btn-attack:hover, .btn-attack2:hover,
-.btn-defend:hover, .btn-special:hover {
-  filter: brightness(1.2);
-}
+.btn-defend:hover, .btn-special:hover { filter: brightness(1.2); }

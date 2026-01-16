@@ -1,81 +1,75 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
   <meta charset="UTF-8">
   <title>Ares RPG</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
 
-  <div id="battle-screen" class="container-fluid vh-100 text-white">
+<div id="battle-screen" class="container-fluid vh-100 text-white">
 
-    <!-- Fondo -->
-    <div id="background"></div>
-    <!-- HUD -->
-    <div id="hud">
+  <!-- Fondo -->
+  <div id="background"></div>
 
-      <!-- Vida jugador -->
-      <div class="life-box player-life">
-        <div class="name">ARES</div>
-        <div class="life-bar">
-          <div id="player-life" class="life-fill"></div>
-        </div>
-      </div>
+  <!-- HUD -->
+  <div id="hud">
 
-      <!-- Vida enemigo -->
-      <div class="life-box enemy-life">
-        <div class="name">ENEMIGO</div>
-        <div class="life-bar">
-          <div id="enemy-life" class="life-fill"></div>
-        </div>
-      </div>
-      <!-- RESULTADO -->
-      <div id="result-screen" class="result-screen d-none">
-        <div class="result-box text-center">
-          <h1 id="result-text"></h1>
-          <div class="mt-4 d-flex gap-3 justify-content-center">
-            <button class="btn btn-success btn-lg" onclick="restartBattle()">Reintentar</button>
-            <button class="btn btn-secondary btn-lg" onclick="goToMenu()">Menú</button>
-          </div>
-        </div>
-      </div>
-
-
-    </div>
-
-
-    <!-- Campo de batalla -->
-    <div class="row h-75 position-relative align-items-end">
-      <div class="col-6 position-relative">
-        <img id="player" class="character player" src="./assets/characters/Beta1.jpeg">
-      </div>
-      <div class="col-6 position-relative">
-        <img id="enemy" class="character enemy" src="./assets/characters/images.jpeg">
+    <!-- Vida jugador -->
+    <div class="life-box player-life">
+      <div class="name">ARES</div>
+      <div class="life-bar">
+        <div id="player-life" class="life-fill"></div>
       </div>
     </div>
 
-    <!-- Menú -->
-<div id="action-menu" class="d-flex justify-content-center gap-4 py-3">
-  <div class="action-btn btn-attack" onclick="selectAction('A')" tabindex="0" role="button" aria-label="Ataque 1">
-    <span>A · Ataque 1</span>
+    <!-- Vida enemigo -->
+    <div class="life-box enemy-life">
+      <div class="name">ENEMIGO</div>
+      <div class="life-bar">
+        <div id="enemy-life" class="life-fill"></div>
+      </div>
+    </div>
+
   </div>
-  <div class="action-btn btn-attack2" onclick="selectAction('S')" tabindex="0" role="button" aria-label="Ataque 2">
-    <span>S · Ataque 2</span>
+
+  <!-- RESULT SCREEN -->
+  <div id="result-screen" class="result-screen d-none">
+    <div class="result-box text-center">
+      <h1 id="result-text"></h1>
+      <div class="mt-4 d-flex gap-3 justify-content-center">
+        <button id="btn-restart" class="btn btn-success btn-lg">Reintentar</button>
+        <button id="btn-menu" class="btn btn-secondary btn-lg">Menú</button>
+      </div>
+    </div>
   </div>
-  <div class="action-btn btn-defend" onclick="selectAction('D')" tabindex="0" role="button" aria-label="Defender">
-    <span>D · Defender</span>
+
+  <!-- Campo de batalla -->
+  <div class="row h-75 position-relative align-items-end">
+    <div class="col-6 position-relative">
+      <img id="player" class="character player" src="./assets/characters/Beta1.jpeg">
+    </div>
+    <div class="col-6 position-relative">
+      <img id="enemy" class="character enemy" src="./assets/characters/images.jpeg">
+    </div>
   </div>
-  <div class="action-btn btn-special" onclick="selectAction('F')" tabindex="0" role="button" aria-label="Especial">
-    <span>F · Especial</span>
+
+  <!-- Menú de acciones -->
+  <div class="row h-25">
+    <div class="col">
+      <div id="action-menu" class="d-flex justify-content-center gap-3">
+        <button id="btn-a" class="action-btn btn-attack">A<br>Ataque 1</button>
+        <button id="btn-s" class="action-btn btn-attack2">S<br>Ataque 2</button>
+        <button id="btn-d" class="action-btn btn-defend">D<br>Defender</button>
+        <button id="btn-f" class="action-btn btn-special">F<br>Especial</button>
+      </div>
+      <p id="battle-log" class="mt-3 text-warning text-center"></p>
+    </div>
   </div>
+
 </div>
-<p id="battle-log" class="mt-3 text-warning"></p>
 
-
-    <script src="./js/game.js"></script>
+<script src="./js/game.js"></script>
 </body>
-
 </html>
