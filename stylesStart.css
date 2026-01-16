@@ -17,6 +17,7 @@ body {
       min-height: 100vh;
     display: grid;
     place-items: center;
+     animation: flicker 5s infinite alternate;
 }
 
 body::before {
@@ -37,3 +38,4 @@ img:hover{
     filter: brightness(100%);
     transform: translateY(-10px);
 }
+
