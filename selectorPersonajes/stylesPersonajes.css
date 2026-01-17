@@ -103,3 +103,22 @@ body::before {
   width: 200px;
   filter: brightness(150%);
 }
+
+.goBattle {
+  background-image: url("./imagenes/boton.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+
+  width: 400px;
+  height: 300px;
+  margin: 0 auto 0 auto;
+  transition: all 0.1s ease;
+}
+
+.goBattle:hover {
+  background-image: url("./imagenes/botonHover.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
