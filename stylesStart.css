@@ -7,7 +7,7 @@
 body {
     margin: 0;
     min-height: 100vh;
-    background-image: url("./assets/0ef3abd7-ed24-4370-88b4-405c535d745c.png");
+    background-image: url("./assets/Wallpaper.jpg");
     background-repeat: no-repeat;
     background-position: center;
     background-attachment: fixed;
@@ -22,7 +22,7 @@ body::before {
     content: "";
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.503);
+    background: rgba(0, 0, 0, 0.328);
     z-index: -1;
 }
 
@@ -56,7 +56,7 @@ img {
     opacity: 0;
     pointer-events: none;
 
-    background-image: url("./assets/ModoDeJuego.png");
+    background-image: url("./assets/GameMode.png");
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -90,4 +90,19 @@ img {
 
 .gameMode{
     filter: brightness(100%);
+}
+
+#overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 90;
+}
+
+#overlay.active {
+  opacity: 1;
+  pointer-events: all;
 }

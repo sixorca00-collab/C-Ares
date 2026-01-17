@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Selección de Personajes</title>
+  <link rel="stylesheet" href="stylesPersonajes.css">
+</head>
+<body>
+
+<h1>Jugador <span id="currentPlayer">1</span> - Elige tu personaje</h1>
+
+<div class="cards">
+  <div class="card" data-character="arco">
+    <div class="card-inner">
+
+      <div class="card-front">
+        <img src="imagenes/arco.jpeg">
+      </div>
+
+      <div class="card-back">
+        <h3>Arco</h3>
+        <p>Daño a distancia y rapidez, requiere destreza, muy buen daño, no usar de cerca.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" data-character="escudo">
+    <div class="card-inner">
+
+      <div class="card-front">
+        <img src="imagenes/escudo.webp">
+      </div>
+
+      <div class="card-back">
+        <h3>Escudo</h3>
+        <p>Alta defensa,se especializa en daño cuerpo a cuerpo perfecto para el defensor.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" data-character="espada">
+    <div class="card-inner">
+
+      <div class="card-front">
+        <img src="imagenes/espada.webp" ></div>
+      <div class="card-back">
+
+        <h3>Espada</h3>
+        <p>Balance total, daño cuerpo a cuerpo potente, entre mas cerca el daño aumenta.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" data-character="lanza">
+    <div class="card-inner">
+
+      <div class="card-front">
+        <img src="imagenes/lanza.web"  height="200">
+      </div>
+
+      <div class="card-back">
+        <h3>Lanza</h3>
+        <p>Buen alcance, daño potente a los enemigos sin importar la distancia.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<button id="goBattle" disabled>Ir a la arena</button>
+
+<script src="personajes.js"></script>
+</body>
+</html>
