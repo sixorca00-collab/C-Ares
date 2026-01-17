@@ -4,15 +4,32 @@
 const player = document.getElementById("player");
 const enemy = document.getElementById("enemy");
 const log = document.getElementById("battle-log");
+<<<<<<< HEAD
 const buttons = document.querySelectorAll("button");
 const background = document.getElementById("background");
 
+=======
+const background = document.getElementById("background");
+
+// HUD
+>>>>>>> dev-juan
 const playerLifeBar = document.getElementById("player-life");
 const enemyLifeBar = document.getElementById("enemy-life");
 
 // RESULT SCREEN
 const resultScreen = document.getElementById("result-screen");
 const resultText = document.getElementById("result-text");
+<<<<<<< HEAD
+=======
+const btnRestart = document.getElementById("btn-restart");
+const btnMenu = document.getElementById("btn-menu");
+
+// ACCIONES
+const btnA = document.getElementById("btn-a");
+const btnS = document.getElementById("btn-s");
+const btnD = document.getElementById("btn-d");
+const btnF = document.getElementById("btn-f");
+>>>>>>> dev-juan
 
 // ==================================================
 // FONDOS ALEATORIOS
@@ -43,7 +60,11 @@ let enemyHP = 100;
 // ==================================================
 function lockMenu(lock) {
   menuLocked = lock;
+<<<<<<< HEAD
   buttons.forEach(btn => btn.disabled = lock);
+=======
+  [btnA, btnS, btnD, btnF].forEach(btn => btn.disabled = lock);
+>>>>>>> dev-juan
 }
 
 function clearAnimations() {
@@ -78,6 +99,7 @@ function selectAction(key) {
 
   switch (key) {
     case "A":
+<<<<<<< HEAD
       playTurn({
         attacker: "player",
         action: "attack",
@@ -114,11 +136,24 @@ function selectAction(key) {
         damage: 30,
         text: "Ares usó Especial"
       });
+=======
+      playTurn({attacker: "player", action: "attack", hit: true, damage: 15, text: "Ares usó Ataque 1"});
+      break;
+    case "S":
+      playTurn({attacker: "player", action: "attack", hit: true, damage: 22, text: "Ares usó Ataque 2"});
+      break;
+    case "D":
+      playTurn({attacker: "player", action: "defend", hit: false, text: "Ares se defendió"});
+      break;
+    case "F":
+      playTurn({attacker: "player", action: "skill", hit: true, damage: 100, text: "Ares usó Especial"});
+>>>>>>> dev-juan
       break;
   }
 }
 
 // ==================================================
+<<<<<<< HEAD
 // TECLADO A S D F
 // ==================================================
 document.addEventListener("keydown", (e) => {
@@ -136,6 +171,23 @@ function highlightButton(key) {
   setTimeout(() => btn.classList.remove("active"), 150);
 }
 
+=======
+// BOTONES
+// ==================================================
+btnA.addEventListener("click", () => selectAction("A"));
+btnS.addEventListener("click", () => selectAction("S"));
+btnD.addEventListener("click", () => selectAction("D"));
+btnF.addEventListener("click", () => selectAction("F"));
+
+// ==================================================
+// TECLADO
+// ==================================================
+document.addEventListener("keydown", (e) => {
+  const key = e.key.toUpperCase();
+  if (["A","S","D","F"].includes(key)) selectAction(key);
+});
+
+>>>>>>> dev-juan
 // ==================================================
 // MOTOR DE ESCENA
 // ==================================================
@@ -143,11 +195,16 @@ function playTurn(result) {
   clearAnimations();
   log.textContent = result.text;
 
+<<<<<<< HEAD
   if (result.attacker === "player") {
     animatePlayer(result);
   } else {
     animateEnemy(result);
   }
+=======
+  if (result.attacker === "player") animatePlayer(result);
+  else animateEnemy(result);
+>>>>>>> dev-juan
 }
 
 // ==================================================
@@ -211,6 +268,7 @@ function endTurn(next, delay) {
 // IA TEMPORAL
 // ==================================================
 function enemyAI() {
+<<<<<<< HEAD
   playTurn({
     attacker: "enemy",
     action: "attack",
@@ -218,12 +276,16 @@ function enemyAI() {
     damage: 12,
     text: "El enemigo atacó"
   });
+=======
+  playTurn({attacker:"enemy", action:"attack", hit:true, damage:12, text:"El enemigo atacó"});
+>>>>>>> dev-juan
 }
 
 // ==================================================
 // FIN DE COMBATE
 // ==================================================
 function checkBattleEnd() {
+<<<<<<< HEAD
   if (enemyHP <= 0) {
     endBattle(true);
     return true;
@@ -232,6 +294,10 @@ function checkBattleEnd() {
     endBattle(false);
     return true;
   }
+=======
+  if (enemyHP <= 0) return endBattle(true);
+  if (playerHP <= 0) return endBattle(false);
+>>>>>>> dev-juan
   return false;
 }
 
@@ -242,6 +308,7 @@ function endBattle(win) {
   resultText.textContent = win ? "¡GANASTE!" : "PERDISTE";
   resultText.style.color = win ? "#4caf50" : "#f44336";
 
+<<<<<<< HEAD
   setTimeout(() => {
     resultScreen.classList.remove("d-none");
   }, 600);
@@ -250,6 +317,17 @@ function endBattle(win) {
 // ==================================================
 // SPA
 // ==================================================
+=======
+  resultScreen.classList.remove("d-none");
+}
+
+// ==================================================
+// SPA / BOTONES MODAL
+// ==================================================
+btnRestart.addEventListener("click", restartBattle);
+btnMenu.addEventListener("click", goToMenu);
+
+>>>>>>> dev-juan
 function restartBattle() {
   gameOver = false;
   currentTurn = "player";
@@ -263,12 +341,20 @@ function restartBattle() {
 
   resultScreen.classList.add("d-none");
   log.textContent = "¡Comienza el combate! · Tu turno";
+<<<<<<< HEAD
+=======
+
+>>>>>>> dev-juan
   lockMenu(false);
 }
 
 function goToMenu() {
+<<<<<<< HEAD
   restartBattle();
   log.textContent = "Menú principal (placeholder)";
+=======
+  window.location.href = "index.html";
+>>>>>>> dev-juan
 }
 
 // ==================================================
@@ -277,3 +363,7 @@ function goToMenu() {
 setRandomBackground();
 updateLifeBars();
 log.textContent = "¡Comienza el combate! · Tu turno";
+<<<<<<< HEAD
+=======
+lockMenu(false);
+>>>>>>> dev-juan

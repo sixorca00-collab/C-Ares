@@ -1,0 +1,171 @@
+body {
+  margin: 0;
+  overflow: hidden;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #111;
+}
+
+/* Fondo */
+#background {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background-image: url("background.jpg");
+  background-size: cover;
+  background-position: center;
+  z-index: -1;
+}
+
+/* Personajes */
+.character {
+  position: absolute;
+  bottom: 200px; /* separados de los botones de acción */
+  width: 120px;
+  transition: transform 0.3s ease;
+  z-index: 3; /* personajes sobre el menú */
+}
+
+.player1 {
+  left: 25%;
+}
+
+.player2 {
+  right: 25%;
+  transform: scaleX(-1);
+}
+
+/* Animaciones */
+.player1.attack { transform: translateX(100px); }
+.player2.attack { transform: translateX(-100px) scaleX(-1); }
+
+.player1.hit { animation: hitPlayer 0.3s; }
+.player2.hit { animation: hit 0.3s; }
+
+@keyframes hit {
+  0% { transform: translateX(0) scaleX(-1); }
+  50% { transform: translateX(15px) scaleX(-1); }
+  100% { transform: translateX(0) scaleX(-1); }
+}
+
+@keyframes hitPlayer {
+  0% { transform: translateX(0); }
+  50% { transform: translateX(-15px); }
+  100% { transform: translateX(0); }
+}
+
+/* HUD */
+#hud {
+  position: absolute;
+  top: 20px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 60px;
+  pointer-events: none;
+  z-index: 4; /* sobre personajes */
+}
+
+/* Caja de vida */
+.life-box {
+  width: 220px;
+  background: rgba(0,0,0,0.6);
+  padding: 10px;
+  border-radius: 8px;
+  color: white;
+  pointer-events: auto;
+}
+
+/* Barra de vida */
+.life-bar {
+  width: 100%;
+  height: 14px;
+  background: #444;
+  border-radius: 7px;
+  overflow: hidden;
+}
+
+.life-fill {
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(to right, #4caf50, #8bc34a);
+  transition: width 0.4s ease;
+}
+
+.player1-life { align-self: flex-start; }
+.player2-life { align-self: flex-end; text-align: right; }
+
+/* RESULT SCREEN */
+.result-screen {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.d-none { display: none !important; }
+
+.result-box {
+  background: #111;
+  padding: 40px 60px;
+  border-radius: 12px;
+  color: white;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+}
+
+/* MENÚ DE ACCIONES */
+.action-menu {
+  background: rgba(0,0,0,0.8);
+  padding: 15px 20px;
+  border-radius: 15px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.6);
+  display: flex;
+  gap: 15px;
+  user-select: none;
+  z-index: 2; /* detrás de personajes */
+}
+
+#action-menu-player1 {
+  position: fixed;
+  bottom: 20px;
+  left: 30%;
+  transform: translateX(-50%);
+}
+
+#action-menu-player2 {
+  position: fixed;
+  bottom: 20px;
+  right: 20%;
+}
+
+/* Botones */
+.action-btn {
+  background: #222;
+  color: white;
+  width: 120px;
+  height: 140px;
+  border-radius: 12px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.5);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-weight: 600;
+}
+
+.action-btn:hover,
+.action-btn:focus { transform: scale(1.1); box-shadow: 0 8px 25px rgba(255,255,255,0.3); outline: none; }
+.action-btn:active { transform: scale(0.95); box-shadow: 0 4px 12px rgba(0,0,0,0.8); }
+
+.btn-attack { background: #d32f2f; }
+.btn-attack2 { background: #fbc02d; color: #222; }
+.btn-defend { background: #1976d2; }
+.btn-special { background: #616161; }
+
+.btn-attack:hover, .btn-attack2:hover,
+.btn-defend:hover, .btn-special:hover { filter: brightness(1.2); }
