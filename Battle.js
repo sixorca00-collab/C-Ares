@@ -1,28 +1,28 @@
-function realizarAtaque(atacante, enemigo){
-    const probFallo = 0.15;
-    const probCritico = 0.20;
-    const multiCritico = 1.5;
-    
-    const random = Math.random();
-    let daño = 0;
-    let resultado = "";
+function realizarAtaque(atacante, enemigo) {
+  const random = Math.random();
+  let daño = 0;
+  let resultado = "";
 
-    if( random < probFallo){
-        daño = 0;
-        resultado = "Fallo";
-    }else if(random < probFallo + probCritico){
-        daño = atacante.ataque * multiCritico;
-        resultado = "Critico";
-    }else{
-        daño = atacante.ataque;
-        resultado = "Normal";
-    }
-    enemigo.vida -= daño;
-    return{
-        resultado: resultado, 
-        daño: daño,
-        vidaRestante: enemigo.vida
-    }
+  if (random < atacante.probFallo) {
+    resultado = "Fallo";
+
+  } else if (random < atacante.probFallo + atacante.probCritico) {
+    daño = atacante.ataque * atacante.multiCritico;
+    resultado = "Critico";
+
+  } else {
+    daño = atacante.ataque;
+    resultado = "Normal";
+  }
+
+  enemigo.vida -= daño;
+  if (enemigo.vida < 0) enemigo.vida = 0;
+
+  return {
+    resultado,
+    daño,
+    vidaRestante: enemigo.vida
+  };
 }
 
 export default realizarAtaque;
