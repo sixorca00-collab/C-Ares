@@ -1,0 +1,222 @@
+body {
+  margin: 0;
+  overflow: hidden;
+}
+
+/* Fondo */
+#background {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background-image: url("background.jpg");
+  background-size: cover;
+  background-position: center;
+  z-index: -1;
+}
+
+/* Personajes */
+.character {
+  position: absolute;
+  bottom: 0;
+  width: 120px;
+  margin: 10px;
+  transition: transform 0.3s ease;
+}
+
+/* Jugador */
+.player {
+  left: 75%;
+}
+
+/* Enemigo */
+.enemy {
+  right: 75%;
+  transform: scaleX(-1);
+}
+
+/* Animaciones */
+.player.attack {
+  transform: translateX(120px);
+}
+
+.enemy.hit {
+  animation: hit 0.3s;
+}
+
+@keyframes hit {
+  0% { transform: translateX(0) scaleX(-1); }
+  50% { transform: translateX(15px) scaleX(-1); }
+  100% { transform: translateX(0) scaleX(-1); }
+}
+
+/* Botones */
+button {
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(255,255,255,0.3);
+}
+
+button:active {
+  transform: scale(0.95);
+}
+/* HUD */
+#hud {
+  position: absolute;
+  top: 20px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 60px;
+  pointer-events: none;
+}
+
+/* Caja de vida */
+.life-box {
+  width: 220px;
+  background: rgba(0,0,0,0.6);
+  padding: 10px;
+  border-radius: 8px;
+  color: white;
+  font-family: sans-serif;
+}
+
+/* Nombre */
+.life-box .name {
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+/* Barra */
+.life-bar {
+  width: 100%;
+  height: 14px;
+  background: #444;
+  border-radius: 7px;
+  overflow: hidden;
+}
+
+/* Relleno */
+.life-fill {
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(to right, #4caf50, #8bc34a);
+  transition: width 0.4s ease;
+}
+
+/* Posiciones */
+.player-life {
+  align-self: flex-start;
+}
+
+.enemy-life {
+  align-self: flex-end;
+  text-align: right;
+}
+/* RESULT SCREEN */
+.result-screen {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.result-box {
+  background: #111;
+  padding: 40px 60px;
+  border-radius: 12px;
+  color: white;
+}
+
+.result-box h1 {
+  font-size: 48px;
+}
+/*menu*/
+#action-menu {
+  background: rgba(0,0,0,0.8);
+  padding: 15px 30px;
+  border-radius: 15px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.6);
+  user-select: none;
+}
+
+.action-btn {
+  background: #222;
+  color: white;
+  width: 120px;
+  height: 140px;
+  border-radius: 12px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.5);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-weight: 600;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.action-btn:hover,
+.action-btn:focus {
+  transform: scale(1.1);
+  box-shadow: 0 8px 25px rgba(255,255,255,0.3);
+  outline: none;
+}
+
+.action-btn:active {
+  transform: scale(0.95);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.8);
+}
+
+.action-icon {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+}
+
+/* Colores específicos */
+.btn-attack {
+  background: #d32f2f; /* rojo fuerte */
+  box-shadow: 0 3px 10px rgba(211, 47, 47, 0.7);
+}
+.btn-attack:hover,
+.btn-attack:focus {
+  box-shadow: 0 8px 25px rgba(211, 47, 47, 0.9);
+}
+
+.btn-attack2 {
+  background: #fbc02d; /* amarillo */
+  color: #222;
+  box-shadow: 0 3px 10px rgba(251, 192, 45, 0.7);
+}
+.btn-attack2:hover,
+.btn-attack2:focus {
+  box-shadow: 0 8px 25px rgba(251, 192, 45, 0.9);
+}
+
+.btn-defend {
+  background: #1976d2; /* azul */
+  box-shadow: 0 3px 10px rgba(25, 118, 210, 0.7);
+}
+.btn-defend:hover,
+.btn-defend:focus {
+  box-shadow: 0 8px 25px rgba(25, 118, 210, 0.9);
+}
+
+.btn-special {
+  background: #616161; /* gris */
+  box-shadow: 0 3px 10px rgba(97, 97, 97, 0.7);
+}
+.btn-special:hover,
+.btn-special:focus {
+  box-shadow: 0 8px 25px rgba(97, 97, 97, 0.9);
+}
+
+

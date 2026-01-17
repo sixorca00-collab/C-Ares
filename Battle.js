@@ -1,4 +1,4 @@
-function realizarAtaque(Atacante, enemigo){
+function realizarAtaque(atacante, enemigo){
     const probFallo = 0.15;
     const probCritico = 0.20;
     const multiCritico = 1.5;
@@ -11,10 +11,10 @@ function realizarAtaque(Atacante, enemigo){
         daño = 0;
         resultado = "Fallo";
     }else if(random < probFallo + probCritico){
-        daño = Atacante.ataque * multiCritico;
+        daño = atacante.ataque * multiCritico;
         resultado = "Critico";
     }else{
-        daño = ataque.Atacante;
+        daño = atacante.ataque;
         resultado = "Normal";
     }
     enemigo.vida -= daño;
@@ -24,3 +24,5 @@ function realizarAtaque(Atacante, enemigo){
         vidaRestante: enemigo.vida
     }
 }
+
+export default realizarAtaque;
