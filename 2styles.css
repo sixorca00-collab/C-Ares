@@ -129,16 +129,15 @@ body {
 }
 
 #action-menu-player1 {
-  position: fixed;
+  position: relative;
   bottom: 20px;
-  left: 30%;
-  transform: translateX(-50%);
+  margin-top: 1%;
 }
 
 #action-menu-player2 {
-  position: fixed;
+  position: relative;
   bottom: 20px;
-  right: 20%;
+  margin-top: 1%;
 }
 
 /* Botones */
@@ -169,3 +168,25 @@ body {
 
 .btn-attack:hover, .btn-attack2:hover,
 .btn-defend:hover, .btn-special:hover { filter: brightness(1.2); }
+/*Separacion de los paneles*/
+#sep {
+  position: fixed;
+  bottom: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(1200px, 95vw);
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 40px;
+
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+
+  z-index: 5;
+}
+
+
+

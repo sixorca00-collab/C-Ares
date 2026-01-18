@@ -29,5 +29,5 @@ goBattleBtn.addEventListener("click", () => {
   localStorage.setItem("player1", selected[0]);
   localStorage.setItem("player2", selected[1]);
 
-  window.location.href = "../Combat.html"; 
+  window.location.href = "../2players.html"; 
 });
