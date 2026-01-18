@@ -1,33 +1,58 @@
-body {
-  background: #000;
-  color: white;
-  font-family: sans-serif;
-  text-align: center;
-}
 
+
+body {
+      margin: 0;
+    min-height: 100vh;
+    background-image: url("../assets/MesaDeJuego.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+    background-size: cover;
+    position: relative;
+    color: white;
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    text-align: center;
+}
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.404);
+    z-index: -1;
+}
 .cards {
   display: flex;
   justify-content: center;
+  flex-direction: row;
   gap: 2rem;
   margin-top: 2rem;
 }
 
 .card {
-  width: 160px;
-  height: 240px;
+  width: 300px;
+  height: 450px;
   perspective: 1000px;
   cursor: pointer;
+
 }
 
 
 /*imagenes*/
 
-img{
-  width: 150px;
-  height: 230px;
+.champ{
+  width: 300px;
+  height: 450px;
   border-radius: 15px;
+  object-fit: cover;
+  transition: all 0.3s ease;
+  filter: brightness(20%);
 }
 
+.champ:hover{
+  transform: translateY(-10px);
+  filter: brightness(160%);
+  box-shadow: 0px 0px 80px rgb(255, 116, 2);
+}
 
 
 .card-inner {
@@ -45,8 +70,6 @@ img{
 .card-back {
   position: absolute;
   inset: 0;
-  border: 2px solid white;
-  border-radius: 15px;
   display: grid;
   place-items: center;
   backface-visibility: hidden;
@@ -59,4 +82,43 @@ img{
 .card-back {
   transform: rotateY(180deg);
   padding: 1rem;
+  background-image: url(./imagenes/CartaAtras.png.png);
+  background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+    background-size: cover;
+
+}
+
+.card-back::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.438);
+    z-index: -1;
+    border-radius: 1rem;
+}
+
+.LogoChamps{
+  width: 200px;
+  filter: brightness(150%);
+}
+
+.goBattle {
+  background-image: url("./imagenes/boton.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+
+  width: 400px;
+  height: 300px;
+  margin: 0 auto 0 auto;
+  transition: all 0.1s ease;
+}
+
+.goBattle:hover {
+  background-image: url("./imagenes/botonHover.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
 }

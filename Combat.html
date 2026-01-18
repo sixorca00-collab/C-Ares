@@ -9,45 +9,67 @@
 <body>
 
 <div id="battle-screen" class="container-fluid vh-100 text-white">
-  
+
   <!-- Fondo -->
   <div id="background"></div>
 
-  <!-- Campo de batalla -->
-  <div class="row h-75 align-items-end">
-    <div class="col-6 text-center">
-      <img id="player1" class="character">
-      <img id="player2" class="character">
+  <!-- HUD -->
+  <div id="hud">
+
+    <!-- Vida jugador -->
+    <div class="life-box player-life">
+      <div class="name">ARES</div>
+      <div class="life-bar">
+        <div id="player-life" class="life-fill"></div>
+      </div>
     </div>
-    <div class="col-6 text-center">
-      <img id="enemy1" class="character">
+
+    <!-- Vida enemigo -->
+    <div class="life-box enemy-life">
+      <div class="name">ENEMIGO</div>
+      <div class="life-bar">
+        <div id="enemy-life" class="life-fill"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- RESULT SCREEN -->
+  <div id="result-screen" class="result-screen d-none">
+    <div class="result-box text-center">
+      <h1 id="result-text"></h1>
+      <div class="mt-4 d-flex gap-3 justify-content-center">
+        <button id="btn-restart" class="btn btn-success btn-lg">Reintentar</button>
+        <button id="btn-menu" class="btn btn-secondary btn-lg">Menú</button>
+      </div>
     </div>
   </div>
 
-  <!-- Menú -->
+  <!-- Campo de batalla -->
+  <div class="row h-75 position-relative align-items-end">
+    <div class="col-6 position-relative">
+      <img id="player" class="character player" src="./assets/characters/Beta1.jpeg">
+    </div>
+    <div class="col-6 position-relative">
+      <img id="enemy" class="character enemy" src="./assets/characters/images.jpeg">
+    </div>
+  </div>
+
+  <!-- Menú de acciones -->
   <div class="row h-25">
     <div class="col">
-      <div class="card bg-dark">
-        <div class="card-body">
-          <div class="row g-2">
-            <div class="col-6"><button class="btn btn-danger w-100" onclick="attack()">Atacar</button></div>
-            <div class="col-6"><button class="btn btn-warning w-100" onclick="skill()">Habilidad</button></div>
-            <div class="col-6"><button class="btn btn-secondary w-100" onclick="defend()">Defender</button></div>
-            <div class="col-6"><button class="btn btn-light w-100" onclick="passTurn()">Pasar</button></div>
-          </div>
-          <p id="battle-log" class="mt-2"></p>
-        </div>
+      <div id="action-menu" class="d-flex justify-content-center gap-3">
+        <button id="btn-a" class="action-btn btn-attack">A<br>Ataque 1</button>
+        <button id="btn-s" class="action-btn btn-attack2">S<br>Ataque 2</button>
+        <button id="btn-d" class="action-btn btn-defend">D<br>Defender</button>
+        <button id="btn-f" class="action-btn btn-special">F<br>Especial</button>
       </div>
+      <p id="battle-log" class="mt-3 text-warning text-center"></p>
     </div>
   </div>
 
 </div>
 
-<script src="./js/characters.js"></script>
-<script src="./js/background.js"></script>
-<script src="./js/ui.js"></script>
-<script src="./js/battle.js"></script>
 <script src="./js/game.js"></script>
-<script src="./game.js"></script>
 </body>
 </html>
