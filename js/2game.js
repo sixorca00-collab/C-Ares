@@ -28,9 +28,7 @@ const resultText = document.getElementById("result-text");
 // FONDOS ALEATORIOS
 // ==================================================
 const backgrounds = [
-  "./assets/backgrounds/bg1.jpg",
-  "./assets/backgrounds/bg2.jpg",
-  "./assets/backgrounds/bg3.jpg"
+  "./assets/WallpaperCombat.webp",
 ];
 
 function setRandomBackground() {
@@ -197,11 +195,39 @@ function restartBattle(){
 function goToMenu(){
   window.location.href = "index.html";
 }
+// ==================================================
+// CARGA DE PERSONAJES DESDE SELECCIÓN
+// ==================================================
+const characters = {
+  arco: "./assets/characters/calaca-bullet.jpeg",
+  escudo: "./assets/characters/images.jpeg",
+  espada: "./assets/characters/Beta1.jpeg",
+  lanza: "./assets/characters/calaca.jpeg"
+};
+
+function loadPlayersFromStorage() {
+  const p1 = localStorage.getItem("player1");
+  const p2 = localStorage.getItem("player2");
+
+  if (p1 && characters[p1]) {
+    player1.src = characters[p1];
+  }
+
+  if (p2 && characters[p2]) {
+    player2.src = characters[p2];
+  }
+}
+
+loadPlayersFromStorage();
+
+
 
 // ==================================================
 // INIT
 // ==================================================
 setRandomBackground();
+loadPlayersFromStorage();
 updateLifeBars();
 lockMenu(false);
 log.textContent = "¡Comienza el combate! · Turno de Jugador 1";
+
