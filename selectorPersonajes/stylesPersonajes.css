@@ -3,7 +3,8 @@
 body {
       margin: 0;
     min-height: 100vh;
-    background-image: url("../assets/MesaDeJuego.png");
+    background-image: url("./imagenes/mesaDeJuego.png");
+    background-color: black;
     background-repeat: no-repeat;
     background-position: center;
     background-attachment: fixed;

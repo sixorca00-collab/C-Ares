@@ -10,7 +10,7 @@ body {
   position: fixed;
   width: 100%;
   height: 100%;
-  background-image: url("background.jpg");
+  background-image: url("./assets/WallpaperCombat.webp");
   background-size: cover;
   background-position: center;
   z-index: -1;
@@ -24,14 +24,26 @@ body {
   transition: transform 0.3s ease;
   z-index: 3; /* personajes sobre el menú */
 }
-
+.charactersContainer{
+  width: 300px;
+  height: 600px;
+}
 .player1 {
   left: 25%;
+  width: 350px;
+  height: auto;
+
+  margin-bottom: 3rem;
+  filter: brightness(120%);
 }
 
 .player2 {
   right: 25%;
   transform: scaleX(-1);
+    width: 370px;
+  height: auto;
+  margin-bottom: 3rem;
+  filter: brightness(120%);
 }
 
 /* Animaciones */

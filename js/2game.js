@@ -39,12 +39,16 @@ function setRandomBackground() {
 // ==================================================
 // ESTADO DEL JUEGO
 // ==================================================
-let currentTurn = "player1"; // turnos: player1, player2
+let currentTurn = "player1";
 let menuLocked = false;
 let gameOver = false;
 
 let player1HP = 100;
 let player2HP = 100;
+
+// 👉 NUEVO: personajes seleccionados
+let player1Character = null;
+let player2Character = null;
 
 // ==================================================
 // UTILIDADES UI
@@ -56,6 +60,14 @@ function lockMenu(lock) {
 function clearAnimations() {
   player1.classList.remove("attack", "hit", "defend");
   player2.classList.remove("attack", "hit", "defend");
+
+  // 👉 Volver a imagen idle
+  if (player1Character) {
+    player1.src = characters[player1Character].idle;
+  }
+  if (player2Character) {
+    player2.src = characters[player2Character].idle;
+  }
 }
 
 // ==================================================
@@ -69,9 +81,9 @@ function updateLifeBars() {
 }
 
 function setLifeColor(bar, hp){
-  if(hp>50) bar.style.background="#4caf50";
-  else if(hp>20) bar.style.background="#ffc107";
-  else bar.style.background="#f44336";
+  if(hp > 50) bar.style.background = "#4caf50";
+  else if(hp > 20) bar.style.background = "#ffb700ff";
+  else bar.style.background = "#f44336";
 }
 
 // ==================================================
@@ -81,7 +93,6 @@ function selectAction(player, key) {
   if(menuLocked || currentTurn !== player || gameOver) return;
 
   lockMenu(true);
-
   let result;
 
   if(player === "player1"){
@@ -121,27 +132,41 @@ function playTurn(result){
   clearAnimations();
   log.textContent = result.text;
 
-  if(result.attacker==="player1") animatePlayer(result, player1, player2, "player2");
-  else animatePlayer(result, player2, player1, "player1");
+  if(result.attacker === "player1") {
+    animatePlayer(result, player1, player2, "player2");
+  } else {
+    animatePlayer(result, player2, player1, "player1");
+  }
 }
 
 // ==================================================
-// ANIMACIONES
+// ANIMACIONES (👉 CAMBIO DE IMAGEN AQUÍ)
 // ==================================================
 function animatePlayer(result, attackerEl, targetEl, nextPlayer){
-  if(result.action==="attack"||result.action==="skill"){
+  const character =
+    result.attacker === "player1"
+      ? player1Character
+      : player2Character;
+
+  if(result.action === "attack" || result.action === "skill"){
+    attackerEl.src = characters[character][result.action];
     attackerEl.classList.add("attack");
+
     if(result.hit){
       setTimeout(()=>{
         targetEl.classList.add("hit");
-        if(result.attacker==="player1") player2HP = Math.max(player2HP - result.damage,0);
-        else player1HP = Math.max(player1HP - result.damage,0);
+        if(result.attacker === "player1") {
+          player2HP = Math.max(player2HP - result.damage, 0);
+        } else {
+          player1HP = Math.max(player1HP - result.damage, 0);
+        }
         updateLifeBars();
         checkBattleEnd();
-      },200);
+      }, 200);
     }
   }
-  else if(result.action==="defend"){
+  else if(result.action === "defend"){
+    attackerEl.src = characters[character].defend;
     attackerEl.classList.add("defend");
   }
 
@@ -164,14 +189,14 @@ function endTurn(next, delay){
 // FIN DE COMBATE
 // ==================================================
 function checkBattleEnd(){
-  if(player1HP<=0) return endBattle("player2");
-  if(player2HP<=0) return endBattle("player1");
+  if(player1HP <= 0) return endBattle("player2");
+  if(player2HP <= 0) return endBattle("player1");
 }
 
 function endBattle(winner){
-  gameOver=true;
+  gameOver = true;
   lockMenu(true);
-  resultText.textContent = winner==="player1"?"¡Jugador 1 GANÓ!":"¡Jugador 2 GANÓ!";
+  resultText.textContent = winner === "player1" ? "¡Jugador 1 GANÓ!" : "¡Jugador 2 GANÓ!";
   resultText.style.color = "#4caf50";
   resultScreen.classList.remove("d-none");
 }
@@ -195,14 +220,35 @@ function restartBattle(){
 function goToMenu(){
   window.location.href = "index.html";
 }
+
 // ==================================================
 // CARGA DE PERSONAJES DESDE SELECCIÓN
 // ==================================================
 const characters = {
-  arco: "./assets/characters/calaca-bullet.jpeg",
-  escudo: "./assets/characters/images.jpeg",
-  espada: "./assets/characters/Beta1.jpeg",
-  lanza: "./assets/characters/calaca.jpeg"
+  arco: {
+    idle: "./assets/characters/ArqueroEstandar.png",
+    attack: "./assets/characters/ArqueroAtaque.png",
+    defend: "./assets/characters/ArcoDefensa.png",
+    skill: "./assets/characters/ArqueroUlti.png"
+  },
+  escudo: {
+    idle: "./assets/characters/EscuderoEstandar.png",
+    attack: "./assets/characters/EscuderoAtaque.png",
+    defend: "./assets/characters/EscuderoDefensa.png",
+    skill: "./assets/characters/EscuderoUlti.png"
+  },
+  espada: {
+    idle: "./assets/characters/EspadaEstandarr.png",
+    attack: "./assets/characters/EspadaAtaque.png",
+    defend: "./assets/characters/EspadaDefensa.png",
+    skill: "./assets/characters/EspadaUlti.png"
+  },
+  lanza: {
+    idle: "./assets/characters/LanzaEstandarr.png",
+    attack: "./assets/characters/LanzaAtaque.png",
+    defend: "./assets/characters/LanzaDefensa.png",
+    skill: "./assets/characters/LanzaUlti.png"
+  }
 };
 
 function loadPlayersFromStorage() {
@@ -210,17 +256,15 @@ function loadPlayersFromStorage() {
   const p2 = localStorage.getItem("player2");
 
   if (p1 && characters[p1]) {
-    player1.src = characters[p1];
+    player1Character = p1;
+    player1.src = characters[p1].idle;
   }
 
   if (p2 && characters[p2]) {
-    player2.src = characters[p2];
+    player2Character = p2;
+    player2.src = characters[p2].idle;
   }
 }
-
-loadPlayersFromStorage();
-
-
 
 // ==================================================
 // INIT
@@ -230,4 +274,3 @@ loadPlayersFromStorage();
 updateLifeBars();
 lockMenu(false);
 log.textContent = "¡Comienza el combate! · Turno de Jugador 1";
-
