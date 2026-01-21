@@ -96,8 +96,9 @@ function selectAction(player, key) {
   let result;
 
   if(player === "player1"){
+    alert(typeof calculateAttack);
     switch(key){
-      case "A": result = {attacker:"player1", action:"attack", hit:true, damage:15, text:"Jugador 1 usó Ataque 1"}; break;
+      case "A": result = {attacker:"player1", action:"attack", hit:true, damage:calculateAttack, text:"Jugador 1 usó Ataque 1"}, console.log(calculateAttack); break;
       case "S": result = {attacker:"player1", action:"attack", hit:true, damage:22, text:"Jugador 1 usó Ataque 2"}; break;
       case "D": result = {attacker:"player1", action:"defend", hit:false, text:"Jugador 1 se defendió"}; break;
       case "F": result = {attacker:"player1", action:"skill", hit:true, damage:30, text:"Jugador 1 usó Especial"}; break;
@@ -226,6 +227,12 @@ function goToMenu(){
 // ==================================================
 const characters = {
   arco: {
+    nombre: "Arco",
+    vida: 70,
+    ataque: 18,
+    probFallo: 0.30,
+    probCritico: 0.35,
+    multiCritico: 2.0,
     idle: "./assets/characters/ArqueroEstandar.png",
     attack: "./assets/characters/ArqueroAtaque.png",
     defend: "./assets/characters/ArcoDefensa.png",
@@ -274,3 +281,41 @@ loadPlayersFromStorage();
 updateLifeBars();
 lockMenu(false);
 log.textContent = "¡Comienza el combate! · Turno de Jugador 1";
+
+// ==================================================
+// CALCULAR DAÑO
+// ==================================================
+function calculateAttack(attacker) {
+  const characterKey =
+    attacker === "player1" ? player1Character : player2Character;
+
+  const stats = characters[characterKey];
+
+  const random = Math.random();
+
+  let damage = 0;
+  let hit = true;
+  let result = "Normal";
+
+  // Fallo
+  if (random < stats.probFallo) {
+    hit = false;
+    damage = 0;
+    result = "Falló";
+
+  // Crítico
+  } else if (random < stats.probFallo + stats.probCritico) {
+    damage = stats.ataque * stats.multiCritico;
+    result = "Crítico";
+
+  // Normal
+  } else {
+    damage = stats.ataque;
+  }
+
+  return {
+    hit,
+    damage: Math.round(damage),
+    result
+  };
+}
