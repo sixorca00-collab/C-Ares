@@ -1,9 +1,78 @@
 // ==================================================
+// PERSONAJES DISPONIBLES
+// ==================================================
+const characters = {
+  arco: {
+    nombre: "Arco",
+    vida: 70,
+    ataque: 18,
+    probFallo: 0.30,
+    probCritico: 0.35,
+    multiCritico: 2.0,
+    idle: "./assets/characters/ArqueroEstandar.png",
+    attack: "./assets/characters/ArqueroAtaque.png",
+    defend: "./assets/characters/ArcoDefensa.png",
+    skill: "./assets/characters/ArqueroUlti.png"
+  },
+  escudo: {
+    nombre: "Escudo",
+    vida: 140,
+    ataque: 12,
+    probFallo: 0.10,
+    probCritico: 0.10,
+    multiCritico: 1.3,
+    idle: "./assets/characters/EscuderoEstandar.png",
+    attack: "./assets/characters/EscuderoAtaque.png",
+    defend: "./assets/characters/EscuderoDefensa.png",
+    skill: "./assets/characters/EscuderoUlti.png"
+  },
+  espada: {
+    nombre: "Espada",
+    vida: 100,
+    ataque: 20,
+    probFallo: 0.15,
+    probCritico: 0.20,
+    multiCritico: 1.5,
+    idle: "./assets/characters/EspadaEstandarr.png",
+    attack: "./assets/characters/EspadaAtaque.png",
+    defend: "./assets/characters/EspadaDefensa.png",
+    skill: "./assets/characters/EspadaUlti.png"
+  },
+  lanza: {
+    nombre: "Lanza",
+    vida: 90,
+    ataque: 25,
+    probFallo: 0.20,
+    probCritico: 0.25,
+    multiCritico: 1.7,
+    idle: "./assets/characters/LanzaEstandarr.png",
+    attack: "./assets/characters/LanzaAtaque.png",
+    defend: "./assets/characters/LanzaDefensa.png",
+    skill: "./assets/characters/LanzaUlti.png"
+  }
+};
+
+// ==================================================
+// ESTADO DEL JUEGO
+// ==================================================
+let player1Character = null;
+let player2Character = null;
+
+let player1HP = characters.vida;
+let player2HP = 0;
+
+
+let currentTurn = "player1";
+let menuLocked = false;
+let gameOver = false;
+
+// ==================================================
 // REFERENCIAS DOM
 // ==================================================
 const player1 = document.getElementById("player1");
 const player2 = document.getElementById("player2");
-const log = document.createElement("div"); // Creamos un log interno temporal
+
+const log = document.createElement("div");
 log.style.position = "fixed";
 log.style.top = "100px";
 log.style.left = "50%";
@@ -16,39 +85,21 @@ document.body.appendChild(log);
 
 const background = document.getElementById("background");
 
-// HUD
 const player1LifeBar = document.getElementById("player1-life");
 const player2LifeBar = document.getElementById("player2-life");
 
-// RESULT SCREEN
 const resultScreen = document.getElementById("result-screen");
 const resultText = document.getElementById("result-text");
 
 // ==================================================
 // FONDOS ALEATORIOS
 // ==================================================
-const backgrounds = [
-  "./assets/WallpaperCombat.webp",
-];
+const backgrounds = ["./assets/WallpaperCombat.webp"];
 
 function setRandomBackground() {
   const bg = backgrounds[Math.floor(Math.random() * backgrounds.length)];
   background.style.backgroundImage = `url(${bg})`;
 }
-
-// ==================================================
-// ESTADO DEL JUEGO
-// ==================================================
-let currentTurn = "player1";
-let menuLocked = false;
-let gameOver = false;
-
-let player1HP = 100;
-let player2HP = 100;
-
-// 👉 NUEVO: personajes seleccionados
-let player1Character = null;
-let player2Character = null;
 
 // ==================================================
 // UTILIDADES UI
@@ -61,29 +112,62 @@ function clearAnimations() {
   player1.classList.remove("attack", "hit", "defend");
   player2.classList.remove("attack", "hit", "defend");
 
-  // 👉 Volver a imagen idle
-  if (player1Character) {
-    player1.src = characters[player1Character].idle;
-  }
-  if (player2Character) {
-    player2.src = characters[player2Character].idle;
-  }
+  if (player1Character) player1.src = characters[player1Character].idle;
+  if (player2Character) player2.src = characters[player2Character].idle;
 }
 
-// ==================================================
-// VIDA (VISUAL)
-// ==================================================
 function updateLifeBars() {
-  player1LifeBar.style.width = player1HP + "%";
-  player2LifeBar.style.width = player2HP + "%";
-  setLifeColor(player1LifeBar, player1HP);
-  setLifeColor(player2LifeBar, player2HP);
+  const p1Percent = (player1HP / player1MaxHP) * 100;
+  const p2Percent = (player2HP / player2MaxHP) * 100;
+
+  player1LifeBar.style.width = p1Percent + "%";
+  player2LifeBar.style.width = p2Percent + "%";
+
+  setLifeColor(player1LifeBar, p1Percent);
+  setLifeColor(player2LifeBar, p2Percent);
 }
 
-function setLifeColor(bar, hp){
-  if(hp > 50) bar.style.background = "#4caf50";
-  else if(hp > 20) bar.style.background = "#ffb700ff";
+function setLifeColor(bar, percent) {
+  if (percent > 50) bar.style.background = "#4caf50";
+  else if (percent > 20) bar.style.background = "#ffb700ff";
   else bar.style.background = "#f44336";
+}
+
+// ==================================================
+// CARGA DE PERSONAJES DESDE STORAGE
+// ==================================================
+function loadPlayersFromStorage() {
+  const p1 = localStorage.getItem("player1");
+  const p2 = localStorage.getItem("player2");
+
+  if (p1 && characters[p1]) {
+    player1Character = p1;
+    player1.src = characters[p1].idle;
+  }
+
+  if (p2 && characters[p2]) {
+    player2Character = p2;
+    player2.src = characters[p2].idle;
+  }
+
+  initializeHP();
+}
+
+let player1MaxHP = 0;
+let player2MaxHP = 0;
+
+function initializeHP() {
+  if (player1Character) {
+    player1MaxHP = characters[player1Character].vida;
+    player1HP = player1MaxHP;
+  }
+
+  if (player2Character) {
+    player2MaxHP = characters[player2Character].vida;
+    player2HP = player2MaxHP;
+  }
+
+  updateLifeBars();
 }
 
 // ==================================================
@@ -91,14 +175,23 @@ function setLifeColor(bar, hp){
 // ==================================================
 function selectAction(player, key) {
   if(menuLocked || currentTurn !== player || gameOver) return;
-
   lockMenu(true);
+
   let result;
 
   if(player === "player1"){
-    alert(typeof calculateAttack);
     switch(key){
-      case "A": result = {attacker:"player1", action:"attack", hit:true, damage:calculateAttack, text:"Jugador 1 usó Ataque 1"}, console.log(calculateAttack); break;
+      case "A": {
+        const atk = calculateAttack("player1");
+        result = {
+          attacker: "player1",
+          action: "attack",
+          hit: atk.hit,
+          damage: atk.damage,
+          text: `Jugador 1 atacó (${atk.result})`
+        };
+        break;
+      }
       case "S": result = {attacker:"player1", action:"attack", hit:true, damage:22, text:"Jugador 1 usó Ataque 2"}; break;
       case "D": result = {attacker:"player1", action:"defend", hit:false, text:"Jugador 1 se defendió"}; break;
       case "F": result = {attacker:"player1", action:"skill", hit:true, damage:30, text:"Jugador 1 usó Especial"}; break;
@@ -106,7 +199,17 @@ function selectAction(player, key) {
     }
   } else if(player === "player2"){
     switch(key){
-      case "J": result = {attacker:"player2", action:"attack", hit:true, damage:15, text:"Jugador 2 usó Ataque 1"}; break;
+      case "J": {
+        const atk = calculateAttack("player2");
+        result = {
+          attacker: "player2",
+          action: "attack",
+          hit: atk.hit,
+          damage: atk.damage,
+          text: `Jugador 2 atacó (${atk.result})`
+        };
+        break;
+      }
       case "K": result = {attacker:"player2", action:"attack", hit:true, damage:22, text:"Jugador 2 usó Ataque 2"}; break;
       case "L": result = {attacker:"player2", action:"defend", hit:false, text:"Jugador 2 se defendió"}; break;
       case "Ñ": result = {attacker:"player2", action:"skill", hit:true, damage:30, text:"Jugador 2 usó Especial"}; break;
@@ -141,13 +244,10 @@ function playTurn(result){
 }
 
 // ==================================================
-// ANIMACIONES (👉 CAMBIO DE IMAGEN AQUÍ)
+// ANIMACIONES
 // ==================================================
 function animatePlayer(result, attackerEl, targetEl, nextPlayer){
-  const character =
-    result.attacker === "player1"
-      ? player1Character
-      : player2Character;
+  const character = result.attacker === "player1" ? player1Character : player2Character;
 
   if(result.action === "attack" || result.action === "skill"){
     attackerEl.src = characters[character][result.action];
@@ -158,6 +258,7 @@ function animatePlayer(result, attackerEl, targetEl, nextPlayer){
         targetEl.classList.add("hit");
         if(result.attacker === "player1") {
           player2HP = Math.max(player2HP - result.damage, 0);
+          console.log(player2HP)
         } else {
           player1HP = Math.max(player1HP - result.damage, 0);
         }
@@ -165,8 +266,7 @@ function animatePlayer(result, attackerEl, targetEl, nextPlayer){
         checkBattleEnd();
       }, 200);
     }
-  }
-  else if(result.action === "defend"){
+  } else if(result.action === "defend"){
     attackerEl.src = characters[character].defend;
     attackerEl.classList.add("defend");
   }
@@ -206,8 +306,8 @@ function endBattle(winner){
 // BOTONES RESULT SCREEN
 // ==================================================
 function restartBattle(){
-  player1HP = 100;
-  player2HP = 100;
+  player1HP = player1Character ? characters[player1Character].vida : player1HP;
+  player2HP = player2Character ? characters[player2Character].vida : player2HP;
   currentTurn = "player1";
   gameOver = false;
   updateLifeBars();
@@ -223,99 +323,43 @@ function goToMenu(){
 }
 
 // ==================================================
-// CARGA DE PERSONAJES DESDE SELECCIÓN
-// ==================================================
-const characters = {
-  arco: {
-    nombre: "Arco",
-    vida: 70,
-    ataque: 18,
-    probFallo: 0.30,
-    probCritico: 0.35,
-    multiCritico: 2.0,
-    idle: "./assets/characters/ArqueroEstandar.png",
-    attack: "./assets/characters/ArqueroAtaque.png",
-    defend: "./assets/characters/ArcoDefensa.png",
-    skill: "./assets/characters/ArqueroUlti.png"
-  },
-  escudo: {
-    idle: "./assets/characters/EscuderoEstandar.png",
-    attack: "./assets/characters/EscuderoAtaque.png",
-    defend: "./assets/characters/EscuderoDefensa.png",
-    skill: "./assets/characters/EscuderoUlti.png"
-  },
-  espada: {
-    idle: "./assets/characters/EspadaEstandarr.png",
-    attack: "./assets/characters/EspadaAtaque.png",
-    defend: "./assets/characters/EspadaDefensa.png",
-    skill: "./assets/characters/EspadaUlti.png"
-  },
-  lanza: {
-    idle: "./assets/characters/LanzaEstandarr.png",
-    attack: "./assets/characters/LanzaAtaque.png",
-    defend: "./assets/characters/LanzaDefensa.png",
-    skill: "./assets/characters/LanzaUlti.png"
-  }
-};
-
-function loadPlayersFromStorage() {
-  const p1 = localStorage.getItem("player1");
-  const p2 = localStorage.getItem("player2");
-
-  if (p1 && characters[p1]) {
-    player1Character = p1;
-    player1.src = characters[p1].idle;
-  }
-
-  if (p2 && characters[p2]) {
-    player2Character = p2;
-    player2.src = characters[p2].idle;
-  }
-}
-
-// ==================================================
-// INIT
-// ==================================================
-setRandomBackground();
-loadPlayersFromStorage();
-updateLifeBars();
-lockMenu(false);
-log.textContent = "¡Comienza el combate! · Turno de Jugador 1";
-
-// ==================================================
 // CALCULAR DAÑO
 // ==================================================
 function calculateAttack(attacker) {
-  const characterKey =
-    attacker === "player1" ? player1Character : player2Character;
-
+  const characterKey = attacker === "player1" ? player1Character : player2Character;
   const stats = characters[characterKey];
 
   const random = Math.random();
-
   let damage = 0;
   let hit = true;
   let result = "Normal";
 
-  // Fallo
   if (random < stats.probFallo) {
     hit = false;
     damage = 0;
     result = "Falló";
-
-  // Crítico
   } else if (random < stats.probFallo + stats.probCritico) {
     damage = stats.ataque * stats.multiCritico;
     result = "Crítico";
-
-  // Normal
   } else {
     damage = stats.ataque;
   }
 
-  return {
-    hit,
-    damage: Math.round(damage),
-    result
-  };
+  return { hit, damage: Math.round(damage), result };
 }
+
+// ==================================================
+// SKILL 2
+// ==================================================
+function calculateSpecialAttack(attacker, type) {
+  // lógica específica por ataque
+}
+// ==================================================
+// INICIALIZACIÓN
+// ==================================================
+window.addEventListener("load", () => {
+  setRandomBackground();
+  loadPlayersFromStorage();
+  lockMenu(false);
+  log.textContent = "¡Comienza el combate! · Turno de Jugador 1";
+});
