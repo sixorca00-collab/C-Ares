@@ -27,9 +27,14 @@ body::before {
 }
 
 img {
-    width: 700px;
+    width: 500px;
     filter: brightness(40%);
     transition: all 0.3s ease;
+}
+
+.spartans{
+    width: 700px;
+    filter: brightness(60%);
 }
 
 .mode:hover{
@@ -106,3 +111,4 @@ img {
   opacity: 1;
   pointer-events: all;
 }
+

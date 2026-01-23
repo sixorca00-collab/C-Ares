@@ -26,3 +26,7 @@ function realizarAtaque(atacante, enemigo){
 }
 
 export default realizarAtaque;
+
+
+
+
