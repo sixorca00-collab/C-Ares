@@ -242,5 +242,34 @@ body {
   z-index: 5;
 }
 
+@media (max-width: 1300px) {
+  .player1 {
+    left: 200px;
+  }
+
+  .player2 {
+    right: 200px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .player1 {
+    left: 200px;
+  }
+
+  .player2 {
+    right: 200px;
+  }
+}
+
+@media (max-width: 768px) {
+  .player1 {
+    left: 50px;
+  }
+
+  .player2 {
+    right: 50px;
+  }
+}
 
 
