@@ -1,4 +1,58 @@
 // ==================================================
+// PERSONAJES DISPONIBLES
+// ==================================================
+const characters = {
+  arco: {
+    nombre: "Arco",
+    vida: 70,
+    ataque: 18,
+    probFallo: 0.30,
+    probCritico: 0.35,
+    multiCritico: 2.0,
+    idle: "./assets/characters/ArqueroEstandar.png",
+    attack: "./assets/characters/ArqueroAtaque.png",
+    defend: "./assets/characters/ArcoDefensa.png",
+    skill: "./assets/characters/ArqueroUlti.png"
+  },
+  escudo: {
+    nombre: "Escudo",
+    vida: 140,
+    ataque: 12,
+    probFallo: 0.10,
+    probCritico: 0.10,
+    multiCritico: 1.3,
+    idle: "./assets/characters/EscuderoEstandar.png",
+    attack: "./assets/characters/EscuderoAtaque.png",
+    defend: "./assets/characters/EscuderoDefensa.png",
+    skill: "./assets/characters/EscuderoUlti.png"
+  },
+  espada: {
+    nombre: "Espada",
+    vida: 100,
+    ataque: 20,
+    probFallo: 0.15,
+    probCritico: 0.20,
+    multiCritico: 1.5,
+    idle: "./assets/characters/EspadaEstandarr.png",
+    attack: "./assets/characters/EspadaAtaque.png",
+    defend: "./assets/characters/EspadaDefensa.png",
+    skill: "./assets/characters/EspadaUlti.png"
+  },
+  lanza: {
+    nombre: "Lanza",
+    vida: 90,
+    ataque: 25,
+    probFallo: 0.20,
+    probCritico: 0.25,
+    multiCritico: 1.7,
+    idle: "./assets/characters/LanzaEstandarr.png",
+    attack: "./assets/characters/LanzaAtaque.png",
+    defend: "./assets/characters/LanzaDefensa.png",
+    skill: "./assets/characters/LanzaUlti.png"
+  }
+};
+
+// ==================================================
 // SKILL 2
 // ==================================================
 const skill2Attacks = {
@@ -68,58 +122,78 @@ const skill3Defenses = {
 };
 
 // ==================================================
-// PERSONAJES DISPONIBLES
+// SKILL 4 - ULTIMATE HABILITIES
 // ==================================================
-const characters = {
+const ultimateAttacks = {
   arco: {
-    nombre: "Arco",
-    vida: 70,
-    ataque: 18,
-    probFallo: 0.30,
-    probCritico: 0.35,
-    multiCritico: 2.0,
-    idle: "./assets/characters/ArqueroEstandar.png",
-    attack: "./assets/characters/ArqueroAtaque.png",
-    defend: "./assets/characters/ArcoDefensa.png",
-    skill: "./assets/characters/ArqueroUlti.png"
+    name: "Lluvia de Flechas",
+    damage: 45,
+    condition: {
+      type: "distance", // Requiere distancia (turnos sin recibir daño)
+      value: 2, // 2 turnos sin ser golpeado
+      current: 0
+    },
+    effect: "pierce", // Ignora defensas
+    description: "Dispara una lluvia de flechas que ignora defensas"
   },
   escudo: {
-    nombre: "Escudo",
-    vida: 140,
-    ataque: 12,
-    probFallo: 0.10,
-    probCritico: 0.10,
-    multiCritico: 1.3,
-    idle: "./assets/characters/EscuderoEstandar.png",
-    attack: "./assets/characters/EscuderoAtaque.png",
-    defend: "./assets/characters/EscuderoDefensa.png",
-    skill: "./assets/characters/EscuderoUlti.png"
+    name: "Muro Impenetrable",
+    damage: 30,
+    condition: {
+      type: "damageTaken", // Requiere haber recibido cierto daño
+      value: 40, // Haber recibido 40+ de daño en total
+      current: 0
+    },
+    effect: "shieldAllies", // Otorga escudo a sí mismo
+    shieldValue: 35,
+    description: "Crea un escudo masivo después de resistir mucho daño"
   },
   espada: {
-    nombre: "Espada",
-    vida: 100,
-    ataque: 20,
-    probFallo: 0.15,
-    probCritico: 0.20,
-    multiCritico: 1.5,
-    idle: "./assets/characters/EspadaEstandarr.png",
-    attack: "./assets/characters/EspadaAtaque.png",
-    defend: "./assets/characters/EspadaDefensa.png",
-    skill: "./assets/characters/EspadaUlti.png"
+    name: "Asalto Definitivo",
+    damage: 50,
+    condition: {
+      type: "combo", // Requiere combo de ataques exitosos
+      value: 3, // 3 ataques seguidos que impacten
+      current: 0
+    },
+    effect: "execute", // Daño extra si el enemigo está bajo cierta vida
+    executeThreshold: 0.3, // +50% daño si enemigo <30% vida
+    description: "Ataque devastador tras una racha de éxitos"
   },
   lanza: {
-    nombre: "Lanza",
-    vida: 90,
-    ataque: 25,
-    probFallo: 0.20,
-    probCritico: 0.25,
-    multiCritico: 1.7,
-    idle: "./assets/characters/LanzaEstandarr.png",
-    attack: "./assets/characters/LanzaAtaque.png",
-    defend: "./assets/characters/LanzaDefensa.png",
-    skill: "./assets/characters/LanzaUlti.png"
+    name: "Estocada Perfecta",
+    damage: 40,
+    condition: {
+      type: "precision", // Requiere precisión (no fallar ataques)
+      value: 2, // 2 ataques seguidos sin fallar
+      current: 0
+    },
+    effect: "stun", // Aturde al enemigo (pierde 1 turno)
+    stunChance: 0.7, // 70% de aturdir
+    description: "Estocada precisa que puede aturdir al oponente"
   }
 };
+
+// Añadir al estado del juego
+let player1UltimateReady = false;
+let player2UltimateReady = false;
+
+let player1TurnsWithoutDamage = 0;
+let player2TurnsWithoutDamage = 0;
+
+let player1TotalDamageTaken = 0;
+let player2TotalDamageTaken = 0;
+
+let player1ComboCount = 0;
+let player2ComboCount = 0;
+
+let player1PrecisionCount = 0;
+let player2PrecisionCount = 0;
+
+let player1Stunned = false;
+let player2Stunned = false;
+let player1StunTurns = 0;
+let player2StunTurns = 0;
 
 // ==================================================
 // ESTADO DEL JUEGO
@@ -532,12 +606,289 @@ function calculateSkill2Attack(attacker) {
     debuff
   };
 }
+// ==================================================
+// FUNCIONES AUXILIARES ULTIMATE
+// ==================================================
+function resetUltimateCondition(player) {
+  if (player === "player1") {
+    const ultimate = ultimateAttacks[player1Character];
+    if (ultimate) {
+      switch(ultimate.condition.type) {
+        case "distance": player1TurnsWithoutDamage = 0; break;
+        case "damageTaken": player1TotalDamageTaken = 0; break;
+        case "combo": player1ComboCount = 0; break;
+        case "precision": player1PrecisionCount = 0; break;
+      }
+    }
+  } else {
+    const ultimate = ultimateAttacks[player2Character];
+    if (ultimate) {
+      switch(ultimate.condition.type) {
+        case "distance": player2TurnsWithoutDamage = 0; break;
+        case "damageTaken": player2TotalDamageTaken = 0; break;
+        case "combo": player2ComboCount = 0; break;
+        case "precision": player2PrecisionCount = 0; break;
+      }
+    }
+  }
+}
+
+function getUltimateConditionText(player) {
+  const characterKey = player === "player1" ? player1Character : player2Character;
+  const ultimate = ultimateAttacks[characterKey];
+  const isReady = player === "player1" ? player1UltimateReady : player2UltimateReady;
+  
+  if (!ultimate) return "";
+  
+  if (isReady) return "¡ULTIMATE LISTO!";
+  
+  switch(ultimate.condition.type) {
+    case "distance":
+      const turns = player === "player1" ? player1TurnsWithoutDamage : player2TurnsWithoutDamage;
+      return `(${turns}/${ultimate.condition.value} turnos sin daño)`;
+      
+    case "damageTaken":
+      const damage = player === "player1" ? player1TotalDamageTaken : player2TotalDamageTaken;
+      return `(${damage}/${ultimate.condition.value} daño recibido)`;
+      
+    case "combo":
+      const combo = player === "player1" ? player1ComboCount : player2ComboCount;
+      return `(${combo}/${ultimate.condition.value} ataques seguidos)`;
+      
+    case "precision":
+      const precision = player === "player1" ? player1PrecisionCount : player2PrecisionCount;
+      return `(${precision}/${ultimate.condition.value} ataques sin fallar)`;
+  }
+  
+  return "";
+}
 
 // ==================================================
-// ACCIONES DE JUGADORES (CON SKILL 3)
+// APLICAR EFECTOS DE ULTIMATE
+// ==================================================
+function applyUltimateEffect(attacker, effect, ultimate) {
+  if (effect === "stun") {
+    const target = attacker === "player1" ? "player2" : "player1";
+    if (target === "player1") {
+      player1Stunned = true;
+      player1StunTurns = 1;
+      log.textContent += ` · ${characters[player2Character].nombre} aturde a ${characters[player1Character].nombre}`;
+    } else {
+      player2Stunned = true;
+      player2StunTurns = 1;
+      log.textContent += ` · ${characters[player1Character].nombre} aturde a ${characters[player2Character].nombre}`;
+    }
+  }
+  
+  if (effect === "shield" && ultimate.effect === "shieldAllies") {
+    const target = attacker === "player1" ? "player1" : "player2";
+    if (target === "player1") {
+      // Aplicar escudo temporal
+      player1DefenseBuff = {
+        name: "Muro Impenetrable",
+        effect: "shield",
+        value: ultimate.shieldValue,
+        duration: 2
+      };
+      player1DefenseTurns = 2;
+      log.textContent += ` · ${characters[player1Character].nombre} obtiene escudo de ${ultimate.shieldValue}`;
+    } else {
+      player2DefenseBuff = {
+        name: "Muro Impenetrable",
+        effect: "shield",
+        value: ultimate.shieldValue,
+        duration: 2
+      };
+      player2DefenseTurns = 2;
+      log.textContent += ` · ${characters[player2Character].nombre} obtiene escudo de ${ultimate.shieldValue}`;
+    }
+  }
+}
+// ==================================================
+// CALCULAR ULTIMATE
+// ==================================================
+function calculateUltimateAttack(attacker) {
+  const characterKey = attacker === "player1" ? player1Character : player2Character;
+  const ultimate = ultimateAttacks[characterKey];
+  
+  if (!ultimate || !(attacker === "player1" ? player1UltimateReady : player2UltimateReady)) {
+    return null;
+  }
+  
+  let damage = ultimate.damage;
+  let result = ultimate.name;
+  let effect = null;
+  
+  // Aplicar efectos especiales
+  switch(ultimate.effect) {
+    case "pierce":
+      // Ignora defensas (ya se maneja en calculateAttack)
+      result += " (Perfora defensas)";
+      break;
+      
+    case "execute":
+      const targetHP = attacker === "player1" ? player2HP : player1HP;
+      const targetMaxHP = attacker === "player1" ? player2MaxHP : player1MaxHP;
+      const hpPercent = targetHP / targetMaxHP;
+      
+      if (hpPercent < ultimate.executeThreshold) {
+        damage = Math.round(damage * 1.5);
+        result += " (Ejecución +50%)";
+      }
+      break;
+      
+    case "stun":
+      const stunRoll = Math.random();
+      if (stunRoll < ultimate.stunChance) {
+        effect = "stun";
+        result += " (¡Aturde!)";
+      }
+      break;
+      
+    case "shieldAllies":
+      effect = "shield";
+      result += " (Escudo +35)";
+      break;
+  }
+  
+  return {
+    hit: true,
+    damage: Math.round(damage),
+    result,
+    effect,
+    ultimate: ultimate
+  };
+}
+
+// ==================================================
+// ACTUALIZAR CONDICIONES DE ULTIMATE
+// ==================================================
+function updateUltimateConditions(attacker, result) {
+  const attackerKey = attacker === "player1" ? "player1" : "player2";
+  const targetKey = attacker === "player1" ? "player2" : "player1";
+  
+  // Actualizar condiciones para el ATACANTE
+  if (attackerKey === "player1" && player1Character) {
+    const ultimate = ultimateAttacks[player1Character];
+    
+    if (ultimate.condition.type === "combo") {
+      if (result.hit && (result.action === "attack" || result.action === "skill2")) {
+        player1ComboCount++;
+        if (player1ComboCount >= ultimate.condition.value) {
+          player1UltimateReady = true;
+        }
+      } else if (!result.hit) {
+        player1ComboCount = 0; // Reset combo si falla
+      }
+    }
+    
+    if (ultimate.condition.type === "precision") {
+      if (result.action === "attack" || result.action === "skill2") {
+        if (result.hit) {
+          player1PrecisionCount++;
+          if (player1PrecisionCount >= ultimate.condition.value) {
+            player1UltimateReady = true;
+          }
+        } else {
+          player1PrecisionCount = 0; // Reset precisión si falla
+        }
+      }
+    }
+  }
+  
+  if (attackerKey === "player2" && player2Character) {
+    const ultimate = ultimateAttacks[player2Character];
+    
+    if (ultimate.condition.type === "combo") {
+      if (result.hit && (result.action === "attack" || result.action === "skill2")) {
+        player2ComboCount++;
+        if (player2ComboCount >= ultimate.condition.value) {
+          player2UltimateReady = true;
+        }
+      } else if (!result.hit) {
+        player2ComboCount = 0;
+      }
+    }
+    
+    if (ultimate.condition.type === "precision") {
+      if (result.action === "attack" || result.action === "skill2") {
+        if (result.hit) {
+          player2PrecisionCount++;
+          if (player2PrecisionCount >= ultimate.condition.value) {
+            player2UltimateReady = true;
+          }
+        } else {
+          player2PrecisionCount = 0;
+        }
+      }
+    }
+  }
+  
+  // Actualizar condiciones para el OBJETIVO (daño recibido)
+  if (result.damage > 0) {
+    if (targetKey === "player1") {
+      player1TotalDamageTaken += result.damage;
+      player1TurnsWithoutDamage = 0; // Reset contador de distancia
+      
+      const ultimate = ultimateAttacks[player1Character];
+      if (ultimate && ultimate.condition.type === "damageTaken") {
+        if (player1TotalDamageTaken >= ultimate.condition.value) {
+          player1UltimateReady = true;
+        }
+      }
+    } else {
+      player2TotalDamageTaken += result.damage;
+      player2TurnsWithoutDamage = 0;
+      
+      const ultimate = ultimateAttacks[player2Character];
+      if (ultimate && ultimate.condition.type === "damageTaken") {
+        if (player2TotalDamageTaken >= ultimate.condition.value) {
+          player2UltimateReady = true;
+        }
+      }
+    }
+  } else {
+    // Incrementar contador de distancia si no recibió daño
+    if (targetKey === "player1") {
+      player1TurnsWithoutDamage++;
+      const ultimate = ultimateAttacks[player1Character];
+      if (ultimate && ultimate.condition.type === "distance") {
+        if (player1TurnsWithoutDamage >= ultimate.condition.value) {
+          player1UltimateReady = true;
+        }
+      }
+    } else {
+      player2TurnsWithoutDamage++;
+      const ultimate = ultimateAttacks[player2Character];
+      if (ultimate && ultimate.condition.type === "distance") {
+        if (player2TurnsWithoutDamage >= ultimate.condition.value) {
+          player2UltimateReady = true;
+        }
+      }
+    }
+  }
+}
+
+// ==================================================
+// ACCIONES DE JUGADORES
 // ==================================================
 function selectAction(player, key) {
   if (menuLocked || currentTurn !== player || gameOver) return;
+  
+  // Verificar si está aturdido
+  if ((player === "player1" && player1Stunned) || (player === "player2" && player2Stunned)) {
+    log.textContent = `${player === "player1" ? characters[player1Character].nombre : characters[player2Character].nombre} está aturdido y no puede actuar`;
+    if (player === "player1") {
+      player1Stunned = false;
+      player1StunTurns = 0;
+    } else {
+      player2Stunned = false;
+      player2StunTurns = 0;
+    }
+    endTurn(player === "player1" ? "player2" : "player1", 1000);
+    return;
+  }
+  
   lockMenu(true);
 
   let result;
@@ -555,6 +906,7 @@ function selectAction(player, key) {
           blocked: atk.blocked,
           text: `Jugador 1 atacó (${atk.result})`
         };
+        updateUltimateConditions("player1", result);
         break;
       }
       case "S": {
@@ -570,6 +922,7 @@ function selectAction(player, key) {
             blocked: false,
             text: `Jugador 1 usó ${atk.result}`
           };
+          updateUltimateConditions("player1", result);
         }
         break;
       }
@@ -591,15 +944,34 @@ function selectAction(player, key) {
         break;
       }
       case "F": {
-        result = {
-          attacker: "player1",
-          action: "skill",
-          hit: true,
-          damage: 30,
-          storedDamage: 0,
-          blocked: false,
-          text: "Jugador 1 usó Especial"
-        };
+        // ULTIMATE
+        const atk = calculateUltimateAttack("player1");
+        if (atk) {
+          result = {
+            attacker: "player1",
+            action: "ultimate",
+            hit: atk.hit,
+            damage: atk.damage,
+            storedDamage: 0,
+            blocked: false,
+            effect: atk.effect,
+            ultimate: atk.ultimate,
+            text: `Jugador 1 usó ULTIMATE: ${atk.result}`
+          };
+          // Resetear ultimate después de usarlo
+          player1UltimateReady = false;
+          resetUltimateCondition("player1");
+        } else {
+          result = {
+            attacker: "player1",
+            action: "ultimate",
+            hit: false,
+            damage: 0,
+            storedDamage: 0,
+            blocked: false,
+            text: "¡Ultimate no disponible! " + getUltimateConditionText("player1")
+          };
+        }
         break;
       }
       default: lockMenu(false); return;
@@ -617,6 +989,7 @@ function selectAction(player, key) {
           blocked: atk.blocked,
           text: `Jugador 2 atacó (${atk.result})`
         };
+        updateUltimateConditions("player2", result);
         break;
       }
       case "K": {
@@ -632,6 +1005,7 @@ function selectAction(player, key) {
             blocked: false,
             text: `Jugador 2 usó ${atk.result}`
           };
+          updateUltimateConditions("player2", result);
         }
         break;
       }
@@ -653,15 +1027,34 @@ function selectAction(player, key) {
         break;
       }
       case "Ñ": {
-        result = {
-          attacker: "player2",
-          action: "skill",
-          hit: true,
-          damage: 30,
-          storedDamage: 0,
-          blocked: false,
-          text: "Jugador 2 usó Especial"
-        };
+        // ULTIMATE (tecla Ñ)
+        const atk = calculateUltimateAttack("player2");
+        if (atk) {
+          result = {
+            attacker: "player2",
+            action: "ultimate",
+            hit: atk.hit,
+            damage: atk.damage,
+            storedDamage: 0,
+            blocked: false,
+            effect: atk.effect,
+            ultimate: atk.ultimate,
+            text: `Jugador 2 usó ULTIMATE: ${atk.result}`
+          };
+          // Resetear ultimate después de usarlo
+          player2UltimateReady = false;
+          resetUltimateCondition("player2");
+        } else {
+          result = {
+            attacker: "player2",
+            action: "ultimate",
+            hit: false,
+            damage: 0,
+            storedDamage: 0,
+            blocked: false,
+            text: "¡Ultimate no disponible! " + getUltimateConditionText("player2")
+          };
+        }
         break;
       }
       default: lockMenu(false); return;
@@ -683,11 +1076,12 @@ document.addEventListener("keydown", (e)=>{
 // ==================================================
 // MOTOR DE ESCENA
 // ==================================================
-function playTurn(result){
+function playTurn(result) {
   clearAnimations();
   
-  // Mostrar información adicional sobre debuffs y defensas
   let statusInfo = "";
+  
+  // Info de debuffs y defensas
   if (player1Debuff) {
     const charName = characters[player1Character]?.nombre || "Jugador 1";
     statusInfo += ` [${charName} debilitado]`;
@@ -705,9 +1099,33 @@ function playTurn(result){
     statusInfo += ` [${charName} con ${player2DefenseBuff.name} (${player2DefenseTurns}t)]`;
   }
   
+  // Info de stun
+  if (player1Stunned) {
+    const charName = characters[player1Character]?.nombre || "Jugador 1";
+    statusInfo += ` [${charName} aturdido]`;
+  }
+  if (player2Stunned) {
+    const charName = characters[player2Character]?.nombre || "Jugador 2";
+    statusInfo += ` [${charName} aturdido]`;
+  }
+  
+  // Info de ultimate (solo si no está listo)
+  if (!player1UltimateReady && player1Character) {
+    const conditionText = getUltimateConditionText("player1");
+    if (conditionText) {
+      statusInfo += ` [Ultimate: ${conditionText}]`;
+    }
+  }
+  if (!player2UltimateReady && player2Character) {
+    const conditionText = getUltimateConditionText("player2");
+    if (conditionText) {
+      statusInfo += ` [Ultimate: ${conditionText}]`;
+    }
+  }
+  
   log.textContent = result.text + statusInfo;
 
-  if(result.attacker === "player1") {
+  if (result.attacker === "player1") {
     animatePlayer(result, player1, player2, "player2");
   } else {
     animatePlayer(result, player2, player1, "player1");
@@ -717,33 +1135,31 @@ function playTurn(result){
 // ==================================================
 // ANIMACIONES (MODIFICADA PARA EL ESCUDO)
 // ==================================================
-function animatePlayer(result, attackerEl, targetEl, nextPlayer){
+function animatePlayer(result, attackerEl, targetEl, nextPlayer) {
   const character = result.attacker === "player1" ? player1Character : player2Character;
   const charData = characters[character];
   
   // Determinar qué imagen mostrar según la acción
-  if(result.action === "attack"){
+  if (result.action === "attack") {
     attackerEl.src = charData.attack;
     attackerEl.classList.add("attack");
-  } else if(result.action === "skill2" || result.action === "skill"){
-    // Usar la misma imagen de skill para ambas habilidades especiales
+  } else if (result.action === "skill2" || result.action === "skill" || result.action === "ultimate") {
     attackerEl.src = charData.skill;
     attackerEl.classList.add("attack");
-  } else if(result.action === "skill3"){
+  } else if (result.action === "skill3") {
     attackerEl.src = charData.defend;
     attackerEl.classList.add("defend");
   }
 
   // Aplicar daño si corresponde
-  if((result.action === "attack" || result.action === "skill" || result.action === "skill2") && result.hit){
-    setTimeout(()=>{
-      // Solo mostrar animación de golpe si el ataque no fue bloqueado
+  if ((result.action === "attack" || result.action === "skill" || result.action === "skill2" || result.action === "ultimate") && result.hit) {
+    setTimeout(() => {
       if (!result.blocked) {
         targetEl.classList.add("hit");
       }
       
-      // Aplicar daño principal (si no fue bloqueado)
-      if(result.attacker === "player1") {
+      // Aplicar daño principal
+      if (result.attacker === "player1") {
         if (!result.blocked) {
           player2HP = Math.max(player2HP - result.damage, 0);
         }
@@ -761,9 +1177,13 @@ function animatePlayer(result, attackerEl, targetEl, nextPlayer){
         }
       }
       
-      // Aplicar debuff si existe (solo en Skill 2)
-      if(result.debuff && result.action === "skill2") {
+      // Aplicar efectos especiales
+      if (result.debuff && result.action === "skill2") {
         applyDebuff(result.attacker, result.debuff);
+      }
+      
+      if (result.effect && result.action === "ultimate") {
+        applyUltimateEffect(result.attacker, result.effect, result.ultimate);
       }
       
       updateLifeBars();
@@ -805,7 +1225,7 @@ function endBattle(winner){
 // ==================================================
 // BOTONES RESULT SCREEN
 // ==================================================
-function restartBattle(){
+function restartBattle() {
   player1HP = player1Character ? characters[player1Character].vida : player1HP;
   player2HP = player2Character ? characters[player2Character].vida : player2HP;
   
@@ -818,6 +1238,22 @@ function restartBattle(){
   player2DefenseTurns = 0;
   player1StoredDamage = 0;
   player2StoredDamage = 0;
+  
+  // Resetear ultimate
+  player1UltimateReady = false;
+  player2UltimateReady = false;
+  player1TurnsWithoutDamage = 0;
+  player2TurnsWithoutDamage = 0;
+  player1TotalDamageTaken = 0;
+  player2TotalDamageTaken = 0;
+  player1ComboCount = 0;
+  player2ComboCount = 0;
+  player1PrecisionCount = 0;
+  player2PrecisionCount = 0;
+  player1Stunned = false;
+  player2Stunned = false;
+  player1StunTurns = 0;
+  player2StunTurns = 0;
   
   currentTurn = "player1";
   gameOver = false;
