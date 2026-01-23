@@ -137,16 +137,16 @@ const ultimateAttacks = {
     description: "Dispara una lluvia de flechas que ignora defensas"
   },
   escudo: {
-    name: "Muro Impenetrable",
-    damage: 30,
+    name: "Regeneración Titanica",
+    damage: 25,
     condition: {
       type: "damageTaken", // Requiere haber recibido cierto daño
-      value: 40, // Haber recibido 40+ de daño en total
+      value: 50, // Haber recibido 50+ de daño en total
       current: 0
     },
-    effect: "shieldAllies", // Otorga escudo a sí mismo
-    shieldValue: 35,
-    description: "Crea un escudo masivo después de resistir mucho daño"
+    effect: "selfHeal", //Se cura a sí mismo
+    healMultiplier: 0.4, // Se cura 40% del daño máximo
+    description: "El Escudo se regenera con fuerza titánica"
   },
   espada: {
     name: "Asalto Definitivo",
@@ -683,7 +683,6 @@ function applyUltimateEffect(attacker, effect, ultimate) {
   if (effect === "shield" && ultimate.effect === "shieldAllies") {
     const target = attacker === "player1" ? "player1" : "player2";
     if (target === "player1") {
-      // Aplicar escudo temporal
       player1DefenseBuff = {
         name: "Muro Impenetrable",
         effect: "shield",
@@ -703,6 +702,25 @@ function applyUltimateEffect(attacker, effect, ultimate) {
       log.textContent += ` · ${characters[player2Character].nombre} obtiene escudo de ${ultimate.shieldValue}`;
     }
   }
+  
+  // NUEVO: EFECTO DE CURACIÓN
+  if (effect === "selfHeal") {
+    const target = attacker === "player1" ? "player1" : "player2";
+    const charKey = target === "player1" ? player1Character : player2Character;
+    const maxHP = characters[charKey].vida;
+    const healAmount = Math.round(maxHP * ultimate.healMultiplier);
+    
+    if (target === "player1") {
+      player1HP = Math.min(player1HP + healAmount, maxHP);
+      log.textContent += ` · ${characters[player1Character].nombre} se cura ${healAmount} HP`;
+    } else {
+      player2HP = Math.min(player2HP + healAmount, maxHP);
+      log.textContent += ` · ${characters[player2Character].nombre} se cura ${healAmount} HP`;
+    }
+    
+    // Actualizar barras de vida
+    updateLifeBars();
+  }
 }
 // ==================================================
 // CALCULAR ULTIMATE
@@ -717,12 +735,11 @@ function calculateUltimateAttack(attacker) {
   
   let damage = ultimate.damage;
   let result = ultimate.name;
-  let effect = null;
+  let effect = ultimate.effect;
   
   // Aplicar efectos especiales
   switch(ultimate.effect) {
     case "pierce":
-      // Ignora defensas (ya se maneja en calculateAttack)
       result += " (Perfora defensas)";
       break;
       
@@ -742,12 +759,18 @@ function calculateUltimateAttack(attacker) {
       if (stunRoll < ultimate.stunChance) {
         effect = "stun";
         result += " (¡Aturde!)";
+      } else {
+        effect = null; // No aplica stun
+        result += " (Sin efecto)";
       }
       break;
       
-    case "shieldAllies":
-      effect = "shield";
-      result += " (Escudo +35)";
+    case "selfHeal":
+      // Para el Escudo, calculamos la curación
+      const charKey = attacker === "player1" ? player1Character : player2Character;
+      const maxHP = characters[charKey].vida;
+      const healAmount = Math.round(maxHP * ultimate.healMultiplier);
+      result += ` (Cura ${healAmount} HP)`;
       break;
   }
   
