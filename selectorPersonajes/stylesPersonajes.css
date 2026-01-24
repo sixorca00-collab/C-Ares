@@ -123,3 +123,9 @@ body::before {
   background-position: center;
   background-size: contain;
 }
+
+
+.disabled {
+  pointer-events: none;
+  opacity: 0.4;
+}

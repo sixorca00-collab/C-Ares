@@ -7,6 +7,9 @@ const goBattleBtn = document.getElementById("goBattle"); //boton de ir a la aren
 let selected = [];      //array vacio
 let currentPlayer = 1;  //
 
+
+goBattleBtn.classList.add("disabled");
+
 cards.forEach(card => {
   card.addEventListener("click", () => {
     if (selected.length >= 2) return;
@@ -20,7 +23,8 @@ cards.forEach(card => {
     }
 
     if (selected.length === 2) {
-      goBattleBtn.disabled = false;
+      goBattleBtn.classList.remove("disabled");
+
     }
   });
 });
